@@ -7,11 +7,11 @@
   font-size: 2rem;
 }
 
-/* .App {
+.App {
   display: flex;
   flex-direction: column;
   align-items: center;
-} */
+}
 
 .logo-mid {
   height: 100px;
@@ -30,9 +30,9 @@
 }
 
 .map {
-  height: 100%;
-  width: 100%;
-  margin: 0px;
+  height: 350px;
+  width: 350px;
+  margin: 30px;
   border: 1px solid gray;
   background-color: rgb(125, 193, 220);
   display: flex;
@@ -40,13 +40,13 @@
   align-items: center;
   justify-content: center;
   color: whitesmoke;
-  /* border-radius: 5px; */
+  border-radius: 5px;
 }
 
 /* --- (4) Leaflet container with map dimensions (other properties optional) --- */
 .leaflet-container {
-  width: 100%;
-  height: 650px;
+  width: 350px;
+  height: 350px;
   border-radius: 5px;
 }
 
