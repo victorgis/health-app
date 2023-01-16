@@ -5,12 +5,9 @@ import 'leaflet/dist/leaflet.css';
 // --- ---------------------------------- ---
 
 export default function Leaflet() {
-  // Berlin coordinates
   const position = [52.51, 13.38]
-
-  // --- (6) Create a custom marker ---
   const customIcon = new Icon({
-    iconUrl: '/icons8-select-24.png',
+    iconUrl: 'https://img.icons8.com/ios-filled/512/worldwide-location.png',
     iconSize: [20, 20],
     // iconAnchor: [1, 1],
     // popupAnchor: [-0, -76]
@@ -18,7 +15,6 @@ export default function Leaflet() {
 
   return (
     <section className='map-component' >
-      {/* --- (5) Add leaflet map container --- */}
       <div className='map'>
       <MapContainer center={position} zoom={6} scrollWheelZoom={true}>
         <TileLayer
@@ -37,7 +33,6 @@ export default function Leaflet() {
           </Popup>
         </Marker>
       </MapContainer>
-      {/* --- ---------------------------- --- */}
       </div>
     </section>
   )
