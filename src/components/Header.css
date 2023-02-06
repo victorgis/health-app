@@ -1,25 +1,26 @@
-.navbar {
-    display: inline;
-}
-
-.fluid {
-    background: red;
-    /* height: 50px; */
-    padding: 0px 25px;
-   
-}
-
- ul.upload {
-    float: right;
-    margin: 0px;
+.header {
+   display: grid;
+   grid-template-columns: 1fr 2fr;
+   align-items: center;
+   height: 50px;
+   background-color: #333;
+   color: #fff;
  }
-
- ul {
-    list-style-type: none;
+ 
+ .header-left {
+   text-align: left;
+   padding-left: 20px;
  }
-
- .center {
-    margin: auto;
-  width: 50%;
-  padding: 10px;
+ 
+ .header-right {
+   display: flex;
+   justify-content: flex-end;
+   padding-right: 20px;
  }
+ 
+ .header-right p {
+   color: #fff;
+   text-decoration: none;
+   margin-left: 20px;
+ }
+ 

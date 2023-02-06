@@ -1,15 +1,17 @@
 import "./App.css"
+import Footer from "./components/Footer";
 
 
 import Header from "./components/Header";
-import Leaflet from "./components/Leaflet";
+import OpenLayersMap from "./components/Openlayers";
 
 
 function App() {
   return (
     <div className="App">
       <Header />
-      <Leaflet />
+      <OpenLayersMap />
+      <Footer />
     </div>
   );
 }
