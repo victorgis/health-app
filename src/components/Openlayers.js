@@ -1,7 +1,4 @@
 import React, { useState, useEffect, useRef } from "react";
-import ReactDOM from 'react-dom/client';
-import { createRoot } from 'react-dom/client';
-// import {StrictMode} from 'react';
 
 import {Map, Overlay, View} from "ol";
 import { fromLonLat } from 'ol/proj';
@@ -11,7 +8,11 @@ import "./Openlayers.css"
 import GeoJSON from 'ol/format/GeoJSON';
 import {x} from "../data/poi"
 import {toLonLat} from 'ol/proj';
-import Popup from "./Popup";
+import {toStringHDMS} from 'ol/coordinate';
+import Popup from 'ol-popup';
+import { transform } from 'ol/proj';
+
+// import Popup from "./Popup";
 
 
 //adding layers
@@ -40,7 +41,8 @@ const OpenLayersMap = () => {
         
         const overlay = new Overlay({
             positioning: 'bottom-center',
-            element: createRoot(document.getElementsByClassName("ol-overlay-container ol-selectable"))
+            stopEvent: false,
+      
 
         });
         
@@ -62,53 +64,21 @@ const OpenLayersMap = () => {
         });
 
 
-        map.addOverlay(overlay);
-
-        // this.map.addOverlay(overlay)
+        //the popup 
+        const popup = new Popup();
+        map.addOverlay(popup);
         
 
-        map.on('click', (event)=>{
-            const coordinate = event.coordinate;
-            const longLat = toLonLat(coordinate);
-            const text = 'Hello OpenLayers nowww';
-            // const long = longLat[0]
-            // const lat = longLat[1]
-
-            
-            overlay.setPosition(coordinate);
-            // overlay.element.innerHTML = `gje`;
-            console.log(overlay)
-
-            //  const popupContainer = document.createElement('div');
-            //  popupContainer.id = "myDiv";
-            //  document.body.appendChild(popupContainer);
-
-            const popupContainer = document.createElement('div');
-            document.body.appendChild(popupContainer);
-
-            const popupRoot = createRoot(popupContainer);
-            popupRoot.render(<Popup coordinate={longLat} text={text} />, popupContainer);
-
         
-
-           
-            
-
-
-            var map = event.map;
-            map.forEachFeatureAtPixel(event.pixel,
-				(feature, layer) => {
-                console.log("Clicked on the feature:", feature, "on the layer:", layer);
-            });
-            console.log(coordinate + ' ' + longLat)
-            
+        map.on('singleclick', function(evt) {
+            var prettyCoord = toStringHDMS(transform(evt.coordinate, 'EPSG:3857', 'EPSG:4326'), 2);
+            popup.show(evt.coordinate, '<div><h2>Coordinates</h2><p>' + prettyCoord + '</p></div>');
+        });
+             
 		});
         
         
 
-
-        return () => map.setTarget(null);
-    }, );
 
 
 
