@@ -102,3 +102,11 @@ input:checked + .slider:before {
   width: 45px;
   height: 60px;
 }
+
+.addHospitalForm {
+  position: absolute;
+  right: 290px;
+  top: 200px;
+  width: 345px;
+  height: 160px;
+}

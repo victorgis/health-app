@@ -3,110 +3,12 @@ import "mapbox-gl/dist/mapbox-gl.css";
 import mapboxgl from "mapbox-gl";
 import "./MapBox.css"; // You can define your own styles in MapBox.css
 
-let map;
-let longitude;
-let latitude;
-
-const AddHospitalForm = () => {
-  // const [showForm, setFormVisibility] = useState(false);
-  const [formData, setFormData] = useState({
-    hospitalName: "",
-    email: "",
-    long: "",
-    lat: "",
-  });
-
-  // const handleForm = () => {
-  //   setFormVisibility(!showForm);
-
-  // };
-
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setFormData({
-      ...formData,
-      [name]: value,
-    });
-  };
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    console.log("Form submitted:", formData);
-    // Add logic to send form data to your backend or perform other actions
-  };
-
-  return (
-    <div>
-      <h2>Add Hospital</h2>
-      <form onSubmit={handleSubmit}>
-        <label htmlFor="name">Name of Hospital:</label>
-        <input
-          type="text"
-          id="hospitalName"
-          name="hospitalName"
-          value={formData.hospitalName}
-          onChange={handleChange}
-          required
-        />
-
-        <label htmlFor="email">Email:</label>
-        <input
-          type="email"
-          id="email"
-          name="email"
-          value={formData.email}
-          onChange={handleChange}
-          required
-        />
-
-        <label htmlFor="email">Longitude:</label>
-        <input
-          type="number"
-          id="number"
-          name="number"
-          value={(formData.long = longitude)}
-          // onChange={handleChange}
-          required
-        />
-
-        <label htmlFor="email">Latitude:</label>
-        <input
-          type="number"
-          id="number"
-          name="number"
-          value={(formData.lat = latitude)}
-          // onChange={handleChange}
-          required
-        />
-
-        <button type="submit">Submit</button>
-      </form>
-    </div>
-  );
-};
-const ToggleSwitch = () => {
+const ToggleSwitch = ({ onToggle }) => {
   const [isChecked, setChecked] = useState(false);
 
   const handleToggle = () => {
     setChecked(!isChecked);
-
-    if (!isChecked) {
-      console.log("I'm checked");
-      map.on("click", (e) => {
-        const x = e.lngLat.lng;
-        const y = e.lngLat.lat;
-
-        console.log("x", x);
-        console.log("y", y);
-        longitude = x;
-        latitude = y;
-      });
-    } else {
-      console.log("I'm unchecked");
-      map.on("click", (e) => {
-        const y = e.lngLat.lat;
-        console.log(y);
-      });
-    }
+    onToggle(!isChecked);
   };
 
   return (
@@ -119,12 +21,14 @@ const ToggleSwitch = () => {
   );
 };
 
+let handleToggle;
+
 const MapBox = () => {
   useEffect(() => {
     mapboxgl.accessToken =
       "pk.eyJ1IjoidmVlc3BhdGlhbCIsImEiOiJjbHJxbXpkZWkwNDRlMmluenlnd2E4Mm9tIn0.2zBcvY3IMGRN2tS7kU5rNg";
 
-    map = new mapboxgl.Map({
+    const map = new mapboxgl.Map({
       container: "map", // container ID
       style: "mapbox://styles/mapbox/streets-v12", // style URL
       center: [9.354, 8.2446], // starting position [lng, lat]
@@ -133,6 +37,24 @@ const MapBox = () => {
 
     // Add zoom and rotation controls to the map.
     map.addControl(new mapboxgl.NavigationControl());
+
+    let clickHandler = null;
+
+    const enableClickHandler = () => {
+      clickHandler = map.on("click", (e) => {
+        const x = e.lngLat.lng;
+        const y = e.lngLat.lat;
+
+        console.log("x", x);
+        console.log("y", y);
+      });
+    };
+
+    const disableClickHandler = () => {
+      if (clickHandler) {
+        clickHandler.remove();
+      }
+    };
 
     map.on("load", () => {
       map.addSource("places", {
@@ -194,6 +116,16 @@ const MapBox = () => {
 
       map.on("click", (e) => console.log(e.lngLat.lat));
 
+      handleToggle = (isChecked) => {
+        if (isChecked) {
+          console.log("I'm checked");
+          enableClickHandler();
+        } else {
+          console.log("I'm unchecked");
+          disableClickHandler();
+        }
+      };
+
       map.on("click", "places", (e) => {
         const coordinates = e.features[0].geometry.coordinates.slice();
         const description = e.features[0].properties;
@@ -245,6 +177,7 @@ const MapBox = () => {
     // Clean up resources on component unmount
     return () => {
       map.remove();
+      disableClickHandler();
     };
   }, []);
 
@@ -254,11 +187,14 @@ const MapBox = () => {
 
       {/* Others  */}
       <div className="addHospital">
-        <ToggleSwitch />
-      </div>
+        <div className="map-container">
+          <div id="map" className="mapbox-map"></div>
 
-      <div className="addHospitalForm">
-        <AddHospitalForm />
+          {/* Others  */}
+          <div className="addHospital">
+            <ToggleSwitch onToggle={(isChecked) => handleToggle(isChecked)} />
+          </div>
+        </div>
       </div>
     </div>
   );

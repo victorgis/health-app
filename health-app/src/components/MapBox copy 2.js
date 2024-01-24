@@ -3,86 +3,6 @@ import "mapbox-gl/dist/mapbox-gl.css";
 import mapboxgl from "mapbox-gl";
 import "./MapBox.css"; // You can define your own styles in MapBox.css
 
-let map;
-let longitude;
-let latitude;
-
-const AddHospitalForm = () => {
-  // const [showForm, setFormVisibility] = useState(false);
-  const [formData, setFormData] = useState({
-    hospitalName: "",
-    email: "",
-    long: "",
-    lat: "",
-  });
-
-  // const handleForm = () => {
-  //   setFormVisibility(!showForm);
-
-  // };
-
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setFormData({
-      ...formData,
-      [name]: value,
-    });
-  };
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    console.log("Form submitted:", formData);
-    // Add logic to send form data to your backend or perform other actions
-  };
-
-  return (
-    <div>
-      <h2>Add Hospital</h2>
-      <form onSubmit={handleSubmit}>
-        <label htmlFor="name">Name of Hospital:</label>
-        <input
-          type="text"
-          id="hospitalName"
-          name="hospitalName"
-          value={formData.hospitalName}
-          onChange={handleChange}
-          required
-        />
-
-        <label htmlFor="email">Email:</label>
-        <input
-          type="email"
-          id="email"
-          name="email"
-          value={formData.email}
-          onChange={handleChange}
-          required
-        />
-
-        <label htmlFor="email">Longitude:</label>
-        <input
-          type="number"
-          id="number"
-          name="number"
-          value={(formData.long = longitude)}
-          // onChange={handleChange}
-          required
-        />
-
-        <label htmlFor="email">Latitude:</label>
-        <input
-          type="number"
-          id="number"
-          name="number"
-          value={(formData.lat = latitude)}
-          // onChange={handleChange}
-          required
-        />
-
-        <button type="submit">Submit</button>
-      </form>
-    </div>
-  );
-};
 const ToggleSwitch = () => {
   const [isChecked, setChecked] = useState(false);
 
@@ -97,15 +17,9 @@ const ToggleSwitch = () => {
 
         console.log("x", x);
         console.log("y", y);
-        longitude = x;
-        latitude = y;
       });
     } else {
       console.log("I'm unchecked");
-      map.on("click", (e) => {
-        const y = e.lngLat.lat;
-        console.log(y);
-      });
     }
   };
 
@@ -124,7 +38,7 @@ const MapBox = () => {
     mapboxgl.accessToken =
       "pk.eyJ1IjoidmVlc3BhdGlhbCIsImEiOiJjbHJxbXpkZWkwNDRlMmluenlnd2E4Mm9tIn0.2zBcvY3IMGRN2tS7kU5rNg";
 
-    map = new mapboxgl.Map({
+    const map = new mapboxgl.Map({
       container: "map", // container ID
       style: "mapbox://styles/mapbox/streets-v12", // style URL
       center: [9.354, 8.2446], // starting position [lng, lat]
@@ -255,10 +169,6 @@ const MapBox = () => {
       {/* Others  */}
       <div className="addHospital">
         <ToggleSwitch />
-      </div>
-
-      <div className="addHospitalForm">
-        <AddHospitalForm />
       </div>
     </div>
   );
